@@ -1,27 +1,31 @@
-//
-//
-// PRIOR CODE:
-
 const connection = require("../config/connection");
 const { User, Thoughts } = require("../models");
-const { getRandomUsernames, getRandomThoughts } = require("./data");
+const { getRandomUsername, getRandomThought } = require("./data");
 
 connection.on("error", (err) => err);
 
 connection.once("open", async () => {
   console.log("connected");
 
-  // Drop existing courses
-  await Course.deleteMany({});
+// Drop existing usernames
+await User.deleteMany({});
 
-  // Drop existing students
-  await Student.deleteMany({});
+// Drop existing Thoughts
+await Thoughts.deleteMany({});
 
-  // Create empty array to hold the students
-  const students = [];
+// Create array to hold usernames
+const usernames = [];
 
-  // Get some random assignment objects using a helper function that we imported from ./data
-  const assignments = getRandomAssignments(20);
+// Refers to ./data function
+const thoughts = getRandomThoughts(30);
+
+// Loops 30x
+
+
+  //
+  //
+  // Prior code:
+
 
   // Loop 20 times -- add students to the students array
   for (let i = 0; i < 20; i++) {
