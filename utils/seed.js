@@ -3,8 +3,8 @@
 // PRIOR CODE:
 
 const connection = require("../config/connection");
-const { Course, Student } = require("../models");
-const { getRandomName, getRandomAssignments } = require("./data");
+const { User, Thoughts } = require("../models");
+const { getRandomUsernames, getRandomThoughts } = require("./data");
 
 connection.on("error", (err) => err);
 
