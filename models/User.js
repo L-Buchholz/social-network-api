@@ -1,5 +1,5 @@
-const { Schema, model, Mongoose } = require("mongoose");
-const thoughtsSchema = require("./Thoughts");
+const { Schema, model, Mongoose, ObjectId } = require("mongoose");
+const Thoughts = require("./Thoughts");
 
 const userSchema = new Schema(
   {
@@ -14,27 +14,25 @@ const userSchema = new Schema(
       //required: true -- Below
       unique: true,
       validate: {
-        validator: function(v) {
+        validator: function (v) {
           return `/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/`.test(v);
-        }
-        //Error message -- syntax?
-        message: email => `${email.value} is not a valid email address`
-      },
-      required: [true, "Email required"]
         },
+        //Error message -- syntax?
+        message: (email) => `${email.value} is not a valid email address`,
+      },
+      required: [true, "Email required"],
+    },
     // Array of _id values referencing the Thought model
-    thoughts: [thoughtsSchema],
+    thoughts: [Thoughts.schema],
     /* *Self-referential* array of _id values referencing the User model
     -- check syntax */
-    friends: { type: Mongoose.Schema.Types.ObjectId, ref: "User" },
+    friends: { type: ObjectId, ref: "User" },
   },
   {
     toJSON: {
       virtuals: true,
       getters: true,
     },
-    // Is this needed?
-    id: false,
   }
 );
 
@@ -43,8 +41,7 @@ userSchema
   .virtual("friendCount")
   // Getter
   .get(function () {
-    // Check syntax -- array
-    return `${this.friends}`.length;
+    return this.friends.length;
   });
 
 const User = model("user", userSchema);

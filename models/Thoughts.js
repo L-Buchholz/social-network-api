@@ -1,14 +1,9 @@
-const { Schema, model, Mongoose } = require("mongoose");
-const userSchema = require("./User");
+const { Schema, model, Mongoose, ObjectId } = require("mongoose");
 
 const reactionSchema = new Schema(
   {
-    reactionId: {
-      //Use Mongoose's ObjectId data type; default value is set to a new ObjectId
-      type: {
-        type: new Mongoose.Types.ObjectId(),
-      },
-    },
+    // This is referenced in the const above
+    reactionId: ObjectId,
     reactionBody: {
       type: String,
       required: true,
@@ -51,24 +46,22 @@ const thoughtsSchema = new Schema(
       required: true,
     },
     // Array of nested documents created with the reactionSchema
-    reactions: [reactionsSchema],
+    reactions: [reactionSchema],
   },
   {
     toJSON: {
       virtuals: true,
       getters: true,
     },
-    id: false,
   }
 );
 
 // Create a virtual property `reactionCount` that retrieves the length of the thought's reactions array field on query.
-userSchema
+thoughtsSchema
   .virtual("reactionCount")
   // Getter
   .get(function () {
-    // Check syntax -- array
-    return `${this.reactions}`.length;
+    return this.reactions.length;
   });
 
 const Thoughts = model("thoughts", thoughtsSchema);
