@@ -1,97 +1,76 @@
-/*
-NEED FOR ASSIGNMENT: 
+const { Schema, model, Mongoose } = require("mongoose");
+const userSchema = require("./User");
 
-thoughtText
-
-- String
-- Required
-- Must be between 1 and 280 characters
-
-createdAt
-- Date
-- Set default value to the current timestamp
-- Use a getter method to format the timestamp on query
-
-username (The user that created this thought)
-- String
-- Required
-
-reactions (These are like replies -- SEE BELOW)
-- Array of nested documents created with the reactionSchema
-
-**Schema Settings:**
-Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
-
-*
-*
-
-Reaction (SCHEMA ONLY)
-
-reactionId
-- Use Mongoose's ObjectId data type
-- Default value is set to a new ObjectId
-
-reactionBody
-- String
-- Required
-- 280 character maximum
-
-username
-- String
-- Required
-
-createdAt
-- Date
-- Set default value to the current timestamp
-- Use a getter method to format the timestamp on query
-
-**Schema Settings:**
-This will not be a separate model, but rather will be used as the reaction field's subdocument schema in the Thought model.
-
-*/
-
-//
-//
-//
-// PRIOR CODE:
-
-const { Schema, model } = require("mongoose");
-
-// Schema to create a course model
-const courseSchema = new Schema(
+const reactionSchema = new Schema(
   {
-    courseName: {
+    reactionId: {
+      //Use Mongoose's ObjectId data type; default value is set to a new ObjectId
+      type: {
+        type: new Mongoose.Types.ObjectId(),
+      },
+    },
+    reactionBody: {
+      type: String,
+      required: true,
+      minLength: 1,
+      maxLength: 280,
+    },
+    username: {
       type: String,
       required: true,
     },
-    inPerson: {
-      type: Boolean,
-      default: true,
+    createdAt: {
+      // Use a getter method to format the timestamp on query
+      date: { type: Date, default: Date.now },
     },
-    startDate: {
-      type: Date,
-      default: Date.now(),
-    },
-    endDate: {
-      type: Date,
-      // Sets a default value of 12 weeks from now
-      default: () => new Date(+new Date() + 84 * 24 * 60 * 60 * 1000),
-    },
-    students: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Student",
-      },
-    ],
   },
   {
     toJSON: {
       virtuals: true,
+      getters: true,
     },
     id: false,
   }
 );
 
-const Course = model("course", courseSchema);
+const thoughtsSchema = new Schema(
+  {
+    thoughtText: {
+      type: String,
+      required: true,
+      // Must be btwn 1 and 280 chars
+      minLength: 1,
+      maxLength: 280,
+    },
+    createdAt: {
+      // Use a getter method to format the timestamp on query
+      date: { type: Date, default: Date.now },
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    // Array of nested documents created with the reactionSchema
+    reactions: [reactionsSchema],
+  },
+  {
+    toJSON: {
+      virtuals: true,
+      getters: true,
+    },
+    id: false,
+  }
+);
 
-module.exports = Course;
+// Create a virtual property `reactionCount` that retrieves the length of the thought's reactions array field on query.
+userSchema
+  .virtual("reactionCount")
+  // Getter
+  .get(function () {
+    // Check syntax -- array
+    return `${this.reactions}`.length;
+  });
+
+const Thoughts = model("thoughts", thoughtsSchema);
+
+module.exports = Thoughts;

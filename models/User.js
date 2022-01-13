@@ -1,64 +1,52 @@
-/*
-NEED FOR ASSIGNMENT: 
+const { Schema, model, Mongoose } = require("mongoose");
+const thoughtsSchema = require("./Thoughts");
 
-username
-- String
-- Unique
-- Required
-- Trimmed
-
-email
-- String
-- Required
-- Unique
-- Must match a valid email address (look into Mongoose's matching validation)
-
-thoughts
-- Array of _id values referencing the Thought model
-
-friends
-- Array of _id values referencing the User model (self-reference)
-
-**Schema Settings:**
-Create a virtual called friendCount that retrieves the length of the user's friends array field on query.
-
-*/
-
-//
-//
-//
-// PRIOR CODE:
-
-const { Schema, model } = require("mongoose");
-const assignmentSchema = require("./Assignment");
-
-// Schema to create Student model
-const studentSchema = new Schema(
+const userSchema = new Schema(
   {
-    first: {
+    username: {
       type: String,
+      unique: true,
       required: true,
-      max_length: 50,
+      trim: true,
     },
-    last: {
+    email: {
       type: String,
-      required: true,
-      max_length: 50,
-    },
-    github: {
-      type: String,
-      required: true,
-      max_length: 50,
-    },
-    assignments: [assignmentSchema],
+      //required: true -- Below
+      unique: true,
+      validate: {
+        validator: function(v) {
+          return `/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/`.test(v);
+        }
+        //Error message -- syntax?
+        message: email => `${email.value} is not a valid email address`
+      },
+      required: [true, "Email required"]
+        },
+    // Array of _id values referencing the Thought model
+    thoughts: [thoughtsSchema],
+    /* *Self-referential* array of _id values referencing the User model
+    -- check syntax */
+    friends: { type: Mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   {
     toJSON: {
+      virtuals: true,
       getters: true,
     },
+    // Is this needed?
+    id: false,
   }
 );
 
-const Student = model("student", studentSchema);
+// Create a virtual property `friendCount` that retrieves the length of the user's friends array field on query
+userSchema
+  .virtual("friendCount")
+  // Getter
+  .get(function () {
+    // Check syntax -- array
+    return `${this.friends}`.length;
+  });
 
-module.exports = Student;
+const User = model("user", userSchema);
+
+module.exports = User;
