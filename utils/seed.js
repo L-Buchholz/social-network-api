@@ -17,7 +17,7 @@ connection.once("open", async () => {
   const usernames = [];
 
   // Refers to ./data function
-  const thoughts = getRandomThoughts(30);
+  const thoughts = getRandomThought(30);
 
   // Loops 30x
   for (let i = 0; i < 30; i++) {
@@ -35,13 +35,17 @@ connection.once("open", async () => {
   // Add usernames to the collection
   await User.collection.insertMany(usernames);
 
-  // Add thoughts to the collection?
+  // TEST ONLY: Add thoughts to the collection
+  await Thoughts.collection.insertMany(thoughts);
+
+  /*
+  // ACTUAL CODE? Add thoughts to the collection?
   await Thoughts.collection.insertOne({
     thoughtText: //What do I need here?,
     reactionBody: //What do I need here?
     username: [...usernames],
   });
-
+  */
 
   // Log out the seed data to indicate what should appear in the database
   console.table(usernames);

@@ -1,51 +1,33 @@
-/*
-NEED FOR ASSIGNMENT: 
-
-**1**
-/api/thoughts
-
-- GET to get all thoughts
-- GET to get a single thought by its _id
-- POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
-// example data
-{
-  "thoughtText": "Here's a cool thought...",
-  "username": "lernantino",
-  "userId": "5edff358a0fcb779aa7b118b"
-}
-- PUT to update a thought by its _id
-- DELETE to remove a thought by its _id
-
-**2**
-/api/thoughts/:thoughtId/reactions
-
-- POST to create a reaction stored in a single thought's reactions array field
-- DELETE to pull and remove a reaction by the reaction's reactionId value
-
-*/
-
-//
-//
-//
-// PRIOR CODE:
-
 const router = require("express").Router();
 const {
-  getCourses,
-  getSingleCourse,
-  createCourse,
-  updateCourse,
-  deleteCourse,
-} = require("../../controllers/courseController.js");
+  getThoughts,
+  getSingleThought,
+  createThought,
+  updateThought,
+  deleteThought,
+  updateThought,
+  addReactions,
+  removeReactions,
+} = require("../../controllers/thoughtsController");
 
-// /api/courses
-router.route("/").get(getCourses).post(createCourse);
+// /api/thoughts
+// GET all Thoughts & CREATE Thought
+// Associate this with a specific user
+router.route("/").get(getThoughts).post(createThought);
 
-// /api/courses/:courseId
+// /api/thoughts/:thoughtsId
+//GET single Thought & UPDATE Thought & DELETE Thought
 router
-  .route("/:courseId")
-  .get(getSingleCourse)
-  .put(updateCourse)
-  .delete(deleteCourse);
+  .route("/:thoughtsId")
+  .get(getSingleThought)
+  .put(updateThought)
+  .delete(deleteThought);
+
+// /api/thoughts/:thoughtsId/reactions
+//ADD Reactions to Thought & REMOVE Reactions from Thought
+router
+  .route("/thoughts/:thoughtsId/reactions")
+  .post(addReactions)
+  .delete(removeReactions);
 
 module.exports = router;

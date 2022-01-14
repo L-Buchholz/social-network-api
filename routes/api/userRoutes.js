@@ -1,54 +1,37 @@
-/*
-NEED FOR ASSIGNMENT: 
-
-**1**
-/api/users
-
-- GET all users
-- GET a single user by its _id and populated thought and friend data
-- POST a new user:
-// example data
-{
-  "username": "lernantino",
-  "email": "lernantino@gmail.com"
-}
-- PUT to update a user by its _id
-- DELETE to remove user by its _id
-// BONUS: Remove a user's associated thoughts when deleted.
-
-**2**
-/api/users/:userId/friends/:friendId
-
-- POST to add a new friend to a user's friend list
-- DELETE to remove a friend from a user's friend list
-
-*/
-
-//
-//
-//
-// PRIOR CODE:
-
 const router = require("express").Router();
 const {
-  getStudents,
-  getSingleStudent,
-  createStudent,
-  deleteStudent,
-  addAssignment,
-  removeAssignment,
-} = require("../../controllers/studentController");
+  getUsers,
+  getSingleUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  addThoughts,
+  removeThoughts,
+  addFriends,
+  removeFriends,
+} = require("../../controllers/userController.js");
 
-// /api/students
-router.route("/").get(getStudents).post(createStudent);
+// /api/users
+// GET all Users & CREATE User
+router.route("/").get(getUsers).post(createUser);
 
-// /api/students/:studentId
-router.route("/:studentId").get(getSingleStudent).delete(deleteStudent);
+// /api/users/:userId
+//GET single User & UPDATE User & DELETE User
+router.route("/:userId").get(getSingleUser).put(updateUser).delete(deleteUser);
 
-// /api/students/:studentId/assignments
-router.route("/:studentId/assignments").post(addAssignment);
+// /api/users/:userId/thoughts/:thoughtId
+// NOT REQUIRED: ADD Thoughts to User & REMOVE Thoughts from User
+router
+  .route("/:userId/thoughts/:thoughtsId")
+  .put(addThoughts)
+  .delete(removeThoughts);
 
-// /api/students/:studentId/assignments/:assignmentId
-router.route("/:studentId/assignments/:assignmentId").delete(removeAssignment);
+// /api/users/:userId/friends/:friendId
+//ADD Friends to User & REMOVE Friends from User
+
+router
+  .route("/:userId/friends/:friendsId")
+  .put(addFriends)
+  .delete(removeFriends);
 
 module.exports = router;
