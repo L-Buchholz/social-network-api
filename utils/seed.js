@@ -7,54 +7,45 @@ connection.on("error", (err) => err);
 connection.once("open", async () => {
   console.log("connected");
 
-// Drop existing usernames
-await User.deleteMany({});
+  // Drop existing usernames
+  await User.deleteMany({});
 
-// Drop existing Thoughts
-await Thoughts.deleteMany({});
+  // Drop existing Thoughts
+  await Thoughts.deleteMany({});
 
-// Create array to hold usernames
-const usernames = [];
+  // Create array to hold usernames
+  const usernames = [];
 
-// Refers to ./data function
-const thoughts = getRandomThoughts(30);
+  // Refers to ./data function
+  const thoughts = getRandomThoughts(30);
 
-// Loops 30x
-
-
-  //
-  //
-  // Prior code:
-
-
-  // Loop 20 times -- add students to the students array
-  for (let i = 0; i < 20; i++) {
-    const fullName = getRandomName();
-    const first = fullName.split(" ")[0];
-    const last = fullName.split(" ")[1];
-    const github = `${first}${Math.floor(Math.random() * (99 - 18 + 1) + 18)}`;
-
-    students.push({
-      first,
-      last,
-      github,
-      assignments,
+  // Loops 30x
+  for (let i = 0; i < 30; i++) {
+    const username = getRandomUsername();
+    const email = `${username}${Math.floor(
+      Math.random() * (99 - 18 + 1) + 18
+    )}`;
+    usernames.push({
+      username,
+      email,
+      thoughts,
     });
   }
 
-  // Add students to the collection and await the results
-  await Student.collection.insertMany(students);
+  // Add usernames to the collection
+  await User.collection.insertMany(usernames);
 
-  // Add courses to the collection and await the results
-  await Course.collection.insertOne({
-    courseName: "UCLA",
-    inPerson: false,
-    students: [...students],
+  // Add thoughts to the collection?
+  await Thoughts.collection.insertOne({
+    thoughtText: //What do I need here?,
+    reactionBody: //What do I need here?
+    username: [...usernames],
   });
 
+
   // Log out the seed data to indicate what should appear in the database
-  console.table(students);
-  console.table(assignments);
-  console.info("Seeding complete! 🌱");
+  console.table(usernames);
+  console.table(thoughts);
+  console.info("DB seed complete!");
   process.exit(0);
 });
