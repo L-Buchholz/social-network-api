@@ -19,12 +19,11 @@ Additionally, video walk-throughs highlighting the program's functionality have 
 
 The following is a screenshot of the Insomnia interface, highlighting the back-end program's appearance and functionality:
 
-![Insomnia app view of the social network API back-end. This image includes: A left-hand column where **[BLAHBLAHEXAMPLE]**, and a right-hand column showing the **[BLAHBLAHEXAMPLE]**](./screenshot.png)
+![Insomnia app view of the social network API back-end. This image includes: A left-hand column where all of the pre-populated routes are called, a middle column where applicable json data can be added, and a right-hand column showing the results of the given command (here a general GET call for all users)](./images/social_network_screenshot.png)
 
 ## Link to video walk-throughs
 
 As the social network back-end application cannot be deployed at a live URL, videos highlighting a walk-through of using this application are included here:
 
-- [LINK]
-- [LINK]
-- [LINK]
+- Calling the database (in Insomnia) using the terminal and illustrating all GET, POST, and PUT routes: https://drive.google.com/file/d/1WWMiKLkM4SlrnX4MVkC9koYCcUus3R_b/view?usp=sharing
+- Illustrating all DELETE routes _(please download this video if the link is blurry for better resolution)_: https://drive.google.com/file/d/1-XU-DiYfkpbpvoIl9SkkjDNw19dQi49E/view?usp=sharing

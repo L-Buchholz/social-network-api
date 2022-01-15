@@ -23,11 +23,11 @@ router
   .delete(deleteThought);
 
 // /api/thoughts/:thoughtsId/reactions
-//ADD Reactions to Thought
-router.route("/thoughts/:thoughtsId/reactions").put(addReactions);
+//ADD (CREATE) Reactions to Thought
+router.route("/:thoughtsId/reactions").post(addReactions);
 
-// /api/thoughts/:thoughtsId/reactions
+// /api/thoughts/:thoughtsId/reactions/:reactionsId
 //REMOVE Reactions from Thought
-router.route("/thoughts/:thoughtsId/:reactionsId").delete(removeReactions);
+router.route("/:thoughtsId/reactions/:reactionsId").delete(removeReactions);
 
 module.exports = router;

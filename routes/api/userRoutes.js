@@ -23,8 +23,8 @@ router.route("/:userId").get(getSingleUser).put(updateUser).delete(deleteUser);
 router.route("/:userId/thoughts/").put(addThoughts);
 
 // /api/users/:userId/friends/
-//ADD Friends to User
-router.route("/:userId/friends/").put(addFriends);
+//ADD (CREATE) Friends to User
+router.route("/:userId/friends/").post(addFriends);
 
 // /api/users/:userId/friends/:friendId
 // REMOVE Friends from User
