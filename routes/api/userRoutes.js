@@ -6,7 +6,6 @@ const {
   updateUser,
   deleteUser,
   addThoughts,
-  removeThoughts,
   addFriends,
   removeFriends,
 } = require("../../controllers/userController.js");
@@ -20,18 +19,15 @@ router.route("/").get(getUsers).post(createUser);
 router.route("/:userId").get(getSingleUser).put(updateUser).delete(deleteUser);
 
 // /api/users/:userId/thoughts/:thoughtId
-// NOT REQUIRED: ADD Thoughts to User & REMOVE Thoughts from User
-router
-  .route("/:userId/thoughts/:thoughtsId")
-  .put(addThoughts)
-  .delete(removeThoughts);
+// ADD Thoughts to User
+router.route("/:userId/thoughts/").put(addThoughts);
+
+// /api/users/:userId/friends/
+//ADD Friends to User
+router.route("/:userId/friends/").put(addFriends);
 
 // /api/users/:userId/friends/:friendId
-//ADD Friends to User & REMOVE Friends from User
-
-router
-  .route("/:userId/friends/:friendsId")
-  .put(addFriends)
-  .delete(removeFriends);
+// REMOVE Friends from User
+router.route("/:userId/friends/:friendsId").delete(removeFriends);
 
 module.exports = router;

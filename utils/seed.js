@@ -12,44 +12,40 @@ connection.once("open", async () => {
 
   // Drop existing Thoughts
   await Thoughts.deleteMany({});
-
+  //
+  //
+  // Add thoughts to the collection?
+  //                    //insert new Array w/ 30 slots, map out following:
+  const thoughtObjects = Array.from({ length: 30 }).map(() => ({
+    thoughtText: getRandomThought(),
+    username: getRandomUsername(),
+    // Reactions are not required for testing the GET function, and are therefore not included in the seed data
+    reactions: [],
+  }));
+  await Thoughts.collection.insertMany(thoughtObjects);
+  //
+  //
   // Create array to hold usernames
-  const usernames = [];
+  const users = [];
 
-  // Refers to ./data function
-  const thoughts = getRandomThought(30);
-
-  // Loops 30x
-  for (let i = 0; i < 30; i++) {
+  // Loops 5x
+  for (let i = 0; i < 5; i++) {
     const username = getRandomUsername();
-    const email = `${username}${Math.floor(
-      Math.random() * (99 - 18 + 1) + 18
-    )}`;
-    usernames.push({
+    const email = `${username}@mymail.com`;
+    users.push({
       username,
       email,
-      thoughts,
+      thoughts: [],
+      // Friends are not required for testing the GET function, and are therefore not included in the seed data
+      friends: [],
     });
   }
 
-  // Add usernames to the collection
-  await User.collection.insertMany(usernames);
-
-  // TEST ONLY: Add thoughts to the collection
-  await Thoughts.collection.insertMany(thoughts);
-
-  /*
-  // ACTUAL CODE? Add thoughts to the collection?
-  await Thoughts.collection.insertOne({
-    thoughtText: //What do I need here?,
-    reactionBody: //What do I need here?
-    username: [...usernames],
-  });
-  */
+  // Add users to the collection
+  await User.collection.insertMany(users);
 
   // Log out the seed data to indicate what should appear in the database
-  console.table(usernames);
-  console.table(thoughts);
+  console.table(users);
   console.info("DB seed complete!");
   process.exit(0);
 });

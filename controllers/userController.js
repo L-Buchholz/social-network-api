@@ -7,7 +7,7 @@ const totalUsers = async () =>
     .count("totalUsers")
     .then((numberOfUsers) => numberOfUsers);
 
-// Aggregate function for getting User Thoughts
+// Aggregate function for getting User Thoughts -- MAY NOT BE NECESSARY:
 // userThoughts
 const userThoughts = async (usernameId) =>
   User.aggregate([
@@ -19,7 +19,7 @@ const userThoughts = async (usernameId) =>
     },
   ]);
 
-// Aggregate function for getting user Friends
+// Aggregate function for getting user Friends -- MAY NOT BE NECESSARY:
 // userFriends
 const userFriends = async (usernameId) =>
   User.aggregate([
@@ -48,19 +48,13 @@ module.exports = {
         return res.status(500).json(err);
       });
   },
-  // GET a single User AND their Thoughts AND Friends (L's note: Separate these?)
+  // GET a single User
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
-      .select("-__v")
       .then(async (user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID" })
-          : res.json({
-              user,
-              email: await req.params.email,
-              thoughts: await userThoughts,
-              friends: await userFriends,
-            })
+          : res.json({ user })
       )
       .catch((err) => {
         console.log(err);
@@ -93,18 +87,7 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID exists" })
-          : Thoughts.findOneAndUpdate(
-              { username: req.params.userId },
-              { $pull: { username: req.params.userId } },
-              { new: true }
-            )
-      )
-      .then((thoughts) =>
-        !thoughts
-          ? res.status(404).json({
-              message: "User deleted, but no associated thoughts found",
-            })
-          : res.json({ message: "Thoughts successfully deleted" })
+          : res.json({ message: "User successfully deleted" })
       )
       .catch((err) => {
         console.log(err);
@@ -118,20 +101,6 @@ module.exports = {
     User.findOneAndUpdate(
       { _id: req.params.userId },
       { $addToSet: { thoughts: req.body } },
-      { runValidators: true, new: true }
-    )
-      .then((user) =>
-        !user
-          ? res.status(404).json({ message: "No user found with that ID" })
-          : res.json(user)
-      )
-      .catch((err) => res.status(500).json(err));
-  },
-  // REMOVE Thoughts from a User
-  removeThoughts(req, res) {
-    User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $pull: { thoughts: { thoughtsId: req.params.thoughtsId } } },
       { runValidators: true, new: true }
     )
       .then((user) =>

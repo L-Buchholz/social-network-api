@@ -1,4 +1,4 @@
-const { Schema, model, Mongoose, ObjectId } = require("mongoose");
+const { Schema, model, ObjectId } = require("mongoose");
 const Thoughts = require("./Thoughts");
 
 const userSchema = new Schema(
@@ -23,10 +23,10 @@ const userSchema = new Schema(
       required: [true, "Email required"],
     },
     // Array of _id values referencing the Thought model
-    thoughts: [Thoughts.schema],
+    thoughts: [{ type: ObjectId, ref: "Thoughts" }],
     /* *Self-referential* array of _id values referencing the User model
     -- check syntax */
-    friends: { type: ObjectId, ref: "User" },
+    friends: [{ type: ObjectId, ref: "User" }],
   },
   {
     toJSON: {
